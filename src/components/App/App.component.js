@@ -5,10 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import ProductListComponent from '../ProductList/ProductList.component';
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<div className="container-fluid px-0">

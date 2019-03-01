@@ -2,9 +2,6 @@ import React from 'react';
 import './Loader.component.scss';
 
 class LoaderComponent extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 	render() {
 		return(
 			<div className="col-12 text-center">

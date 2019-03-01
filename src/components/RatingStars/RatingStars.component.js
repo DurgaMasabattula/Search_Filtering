@@ -1,10 +1,6 @@
 import React from 'react';
 import './RatingStars.component.scss';
 class RatingStarsComponent extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render(){
 		let rating = Math.round(this.props.rating/5*100/10) * 10 + '%';
 		return(
