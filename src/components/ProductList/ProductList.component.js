@@ -93,7 +93,7 @@ class ProductListComponent extends React.Component {
 					)
 				})
 		return (
-			<div className="row mx-0 main-content">
+			<div className="row mx-0" id="maincontent">
 				{ this.state.loader ? <LoaderComponent/> : '' }
 				{rendercomponent} 
 				{ this.state.viewProduct ? <ProductDetailsComponent product={this.state.viewProduct} close={this.emptyProductOnClose}/> : '' }
