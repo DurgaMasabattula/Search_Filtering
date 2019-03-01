@@ -68,6 +68,12 @@ class ProductListComponent extends React.Component {
 		})
 	}
 
+	emptyProductOnClose = () => {
+		this.setState({
+			viewProduct: null
+		})
+	}
+
 	render() {
 		let rendercomponent = this.state.products.map((product, ind) => {
 					return(
@@ -89,8 +95,8 @@ class ProductListComponent extends React.Component {
 		return (
 			<div className="row mx-0 main-content">
 				{ this.state.loader ? <LoaderComponent/> : '' }
-				{rendercomponent}
-				{ this.state.viewProduct ? <ProductDetailsComponent product={this.state.viewProduct} /> : '' }
+				{rendercomponent} 
+				{ this.state.viewProduct ? <ProductDetailsComponent product={this.state.viewProduct} close={this.emptyProductOnClose}/> : '' }
 			</div>
 		)
 	}
