@@ -12,7 +12,7 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="container-fluid px-0">
-				<nav className="navbar navbar-expand-lg navbar-light bg-primary px-5">
+				<nav className="navbar navbar-expand-lg navbar-light bg-primary px-5 app-navbar">
 					<a className="navbar-brand text-white" href="#">Walmart Labs</a>
 				</nav>
 				<BrowserRouter>

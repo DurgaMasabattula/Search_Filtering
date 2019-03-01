@@ -11,25 +11,49 @@ class ProductListComponent extends React.Component {
 		this.state = {
 			products: [],
 			viewProduct: null,
-			loader: false
+			loader: false,
+			totalPages: null,
+			currentPage: 1,
+			pagesize: 30
 		}
 	}
 
+	self = this;
+
 	componentDidMount() {
-		this.getData(1, 30);
+		window.addEventListener('scroll', this.handleOnScroll);
+		this.getData(this.state.currentPage);
 	}
 
-	getData = (number, pagesize) => {
+	componentWillUnmount() {
+		window.removeEventListener('scroll', this.handleOnScroll);
+	}
+
+	handleOnScroll = () => {
+		var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+		var scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
+		var clientHeight = document.documentElement.clientHeight || window.innerHeight;
+		var scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1000;
+		if (scrolledToBottom && this.state.currentPage <= this.state.totalPages) {
+			this.getData(this.state.currentPage);
+			return;
+		}
+	}
+
+	getData = (number) => {
+		if(this.state.loader) { return; }
 		const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-		const url = `${proxyUrl}${endpoints.baseurl}${endpoints.productsList}${number}/${pagesize}`;
-		const self = this;
+		const url = `${proxyUrl}${endpoints.baseurl}${endpoints.productsList}${number}/${this.state.pagesize}`;
+		// const self = this;
 		this.setState({loader : true});
 		fetch(url)
 			.then(response => response.json())
 			.then(data => {
-				self.setState({
-					products: data.products,
-					loader : false
+				this.setState({
+					products: this.state.products.concat(data.products),
+					loader : false,
+					currentPage: this.state.currentPage + 1,
+					totalPages: Math.ceil(data.totalProducts/this.state.pagesize)
 				});
 			})
 			.catch(error => {
@@ -49,7 +73,7 @@ class ProductListComponent extends React.Component {
 					return(
 						<div className="col-12 col-md-4 col-lg-3 mt-5" key={'prod' + ind}>
 							<div className="col-12 shadow h-100">
-								<ul className="list-unstyled text-center h-100 m-0">
+								<ul className="list-unstyled text-center h-100">
 									<li><img height="200" width="auto" src={endpoints.baseurl + product.productImage} /></li>
 									<li>{product.productName}</li>
 									<li className="mt-3 w-100 move-bottom">
@@ -63,7 +87,7 @@ class ProductListComponent extends React.Component {
 					)
 				})
 		return (
-			<div className="row mx-0">
+			<div className="row mx-0 main-content">
 				{ this.state.loader ? <LoaderComponent/> : '' }
 				{rendercomponent}
 				{ this.state.viewProduct ? <ProductDetailsComponent product={this.state.viewProduct} /> : '' }
