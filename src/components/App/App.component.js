@@ -3,7 +3,6 @@ import './App.component.scss';
 import { Router, Route, Switch } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import ProductListComponent from '../ProductList/ProductList.component';
-import ProductDetailsComponent from '../ProductDetails/ProductDetails.component';
 
 class App extends React.Component {
 	constructor(props) {
@@ -19,7 +18,6 @@ class App extends React.Component {
 				<BrowserRouter>
 					<Switch>
 						<Route exact path="/" component={ProductListComponent} />
-						<Route exact path="/" component={ProductDetailsComponent} />
 					</Switch>
 				</BrowserRouter>
 			</div>

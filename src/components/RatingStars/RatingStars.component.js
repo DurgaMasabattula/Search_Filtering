@@ -8,7 +8,7 @@ class RatingStarsComponent extends React.Component {
 	render(){
 		let rating = Math.round(this.props.rating/5*100/10) * 10 + '%';
 		return(
-			<div className="text-left">
+			<div>
 				<span className="stars">
 					<span className="inner-stars" style={{width: rating}}></span> 
 				</span> 
