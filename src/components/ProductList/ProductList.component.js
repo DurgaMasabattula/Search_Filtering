@@ -4,25 +4,24 @@ import endpoints from '../../api/endpoints.config';
 import RatingStarsComponent from '../RatingStars/RatingStars.component';
 import ProductDetailsComponent from '../ProductDetails/ProductDetails.component';
 import LoaderComponent from '../Loader/Loader.component';
+import PropTypes from 'prop-types';
 
 class ProductListComponent extends React.Component {
 	constructor(props) {
 		super(props);
+		this.currentPage = props.currentPage;
+		this.totalPages = props.totalPages;
 		this.state = {
 			products: [],
 			viewProduct: null,
 			loader: false,
-			totalPages: null,
-			currentPage: 1,
-			pagesize: 30
 		}
 	}
 
-	self = this;
 
 	componentDidMount() {
 		window.addEventListener('scroll', this.handleOnScroll);
-		this.getData(this.state.currentPage);
+		this.getData(this.currentPage);
 	}
 
 	componentWillUnmount() {
@@ -34,8 +33,8 @@ class ProductListComponent extends React.Component {
 		var scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
 		var clientHeight = document.documentElement.clientHeight || window.innerHeight;
 		var scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight - 1000;
-		if (scrolledToBottom && this.state.currentPage <= this.state.totalPages) {
-			this.getData(this.state.currentPage);
+		if (scrolledToBottom && this.currentPage <= this.totalPages) {
+			this.getData(this.currentPage);
 			return;
 		}
 	}
@@ -43,8 +42,7 @@ class ProductListComponent extends React.Component {
 	getData = (number) => {
 		if(this.state.loader) { return; }
 		const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-		const url = `${proxyUrl}${endpoints.baseurl}${endpoints.productsList}${number}/${this.state.pagesize}`;
-		// const self = this;
+		const url = `${proxyUrl}${endpoints.baseurl}${endpoints.productsList}${number}/${this.props.pagesize}`;
 		this.setState({loader : true});
 		fetch(url)
 			.then(response => response.json())
@@ -52,9 +50,9 @@ class ProductListComponent extends React.Component {
 				this.setState({
 					products: this.state.products.concat(data.products),
 					loader : false,
-					currentPage: this.state.currentPage + 1,
-					totalPages: Math.ceil(data.totalProducts/this.state.pagesize)
 				});
+				this.totalPages = Math.ceil(data.totalProducts/this.props.pagesize);
+				this.currentPage += 1;
 			})
 			.catch(error => {
 				this.setState({loader : false});
@@ -102,5 +100,15 @@ class ProductListComponent extends React.Component {
 	}
 
 }
+
+ProductListComponent.defaultProps  = {
+	pagesize: 30,
+	currentPage: 1,
+	totalPages: null
+};
+
+ProductListComponent.propTypes = {
+	currentPage: PropTypes.number
+};
 
 export default ProductListComponent;
